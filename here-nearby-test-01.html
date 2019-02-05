@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://apis.google.com/js/api.js" type="text/javascript"></script>
+
+
+ <script type="text/javascript">
+
+//coffee-tea
+//restaurant
+
+function getAddress (latitude, longitude) {
+  $.ajax('https://places.cit.api.here.com/places/v1/discover/explore?at=' + latitude + ',' + longitude + '&cat=restaurant&app_id=ZfRJXkOh1WKLZLV14MDE&app_code=9NvfebHqxDHv33VtQXDsCg')
+  .then(
+    function success (response) {
+      console.log('Suggested locations ', response)
+    },
+    function fail (status) {
+      console.log('Request failed.  Returned status of',
+                  status)
+    }
+   )
+}
+
+function getUserAddress (latitude, longitude) {
+$.ajax({
+	  url: 'https://reverse.geocoder.api.here.com/6.2/reversegeocode.json?prox=' + latitude + ',' + longitude + '',
+	  type: 'GET',
+	  dataType: 'jsonp',
+	  jsonp: 'jsoncallback',
+	  data: {
+	    mode: 'retrieveAddresses',
+	    maxresults: '1',
+	    gen: '9',
+	    app_id: 'ZfRJXkOh1WKLZLV14MDE',
+	    app_code: '9NvfebHqxDHv33VtQXDsCg'
+	  },
+	  success: function (data) {
+	    console.log(JSON.stringify(data));
+	  }
+	});
+};
+
+
+if ("geolocation" in navigator) {
+  // check if geolocation is supported/enabled on current browser
+  navigator.geolocation.getCurrentPosition(
+   function success(position) {
+     // for when getting location is a success
+     console.log('latitude', position.coords.latitude, 
+                 'longitude', position.coords.longitude);
+     getAddress(position.coords.latitude, 
+                position.coords.longitude)
+     getUserAddress(position.coords.latitude, 
+                position.coords.longitude)
+   },
+function error(error_message) {
+    // for when getting location results in an error
+    console.error('An error has occured while retrieving location', error_message)
+    
+ 
+});
+} else {
+  // geolocation is not supported
+  // get your location some other way
+  console.log('geolocation is not enabled on this browser')
+  
+}
+
+</script>
+</body>
+</html>
