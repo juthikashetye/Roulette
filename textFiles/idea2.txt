@@ -1,0 +1,45 @@
+First load:
+
+	User info:
+
+		1. Name
+		2. Location
+		3. email 
+		4. Profession of user
+		5. Profession of person willing to meet
+		6. Gender of both?
+
+Go/Match button >>
+
+Second load:
+
+	For 1st user or user with no match:
+
+		1. Store his/her data in firebase.
+
+		2. Display a msg on screen- "Sorry couldn't find a match right now. We will email you when you get matched."
+
+		3. We don't actually email them, just for demonstration purposes and collecting data.
+
+		4. Optionally we can create a pre-filled database with fake people info so that we can get a match or no match.
+
+	For users with match:
+
+		1. You are meeting "other person name" at a restaurant near you (in an hour??).(we could give them the name of the restaurant so that they find their own means of transport to get there.)
+
+		2. If giving the name of restaurant then >> Display a link saying "Click here to see the website/address of the restaurant"(website url or their address, both can be pulled from the api itself.)
+
+		3. And show the uber or lyft buttons saying you can book a ride to your destination(don't know how to put the co-ordinates for destination and user location here yet.)
+
+
+
+How does the match work?:
+
+	1. User 1 Location == User 2 Location (eg: oakland == oakland)
+
+	2. Profession of User 1 == Want to meet this person info of User 2 && Profession of User 2 == Want to meet this person info of User 1.
+
+	3. Gender preference of User 1 == Gender of User 2 && Gender preference of User 2 == Gender of User 1 (optional criteria) 
+
+	4. If all these match then perform action of finding same restaurant for both. Else send "no match msg"
+

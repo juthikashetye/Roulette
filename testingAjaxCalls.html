@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Testing AJAX</title>
+</head>
+
+<body>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+// Url for zomato lat and lon for SF
+// https://developers.zomato.com/api/v2.1/geocode?lat=37.7749&lon=-122.4194
+        
+    var APIKey = "9af3dc72ac183d3908f22c466e131944";
+    
+    // Here we are building the URL we need to query the database
+    var queryURL = "https://developers.zomato.com/api/v2.1/geocode?lat=37.7749&lon=-122.4194";
+
+    console.log(queryURL);
+
+    $.ajax({
+      url: queryURL,
+      headers: {
+        "Accept": "application/json",
+        "user-key": "9af3dc72ac183d3908f22c466e131944",
+      },
+      method: "GET",
+      dataType: 'json',
+    }).then(function(data){
+      
+      console.log(data);
+
+      // $("body").text(data.location.city_name);
+      for (var i = 0; i < data.nearby_restaurants.length; i++) {
+        var restaurantName = $('<div>');
+        restaurantName.text(data.nearby_restaurants[i].restaurant.name);
+        $("body").append(restaurantName);
+      }
+
+      // $("body").text(data.popularity.top_cuisines);
+      
+    });
+
+  </script>
+
+</body>
+
+</html>

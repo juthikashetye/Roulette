@@ -1,0 +1,25 @@
+Restaurant Roulette
+
+	API: Yelp
+		User input: 1.User location (Geo or/and Editable by input)
+					2.Distance willing to travel
+					3.Optional: Price, Rating
+					4.Booking? (does yelp take booking?)else(Another API)
+
+	API: Uber/Lyft
+		1. Gets the user location and random chosen destination from firebase
+		2.Books ride for the destination
+
+	-----
+
+Other considerations:
+
+(Reservation Roulette) API Open Table:
+						For reservations of table
+
+Basic Idea:
+
+	Web app which selects a random restaurant based on geolocation of the user and
+	distance the user is willing to travel.
+	The app may optionally book a reservation for the restaurant and request transportation via Uber/Lyft.
+

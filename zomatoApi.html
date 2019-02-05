@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Lunch Date x Restaurant Roullette</title>
+</head>
+
+<body>
+  <form>
+    <p>Where are you? <input type="text"></p>
+    <button id="match">Match me</button>
+  </form>
+  <br>
+  <div id="buttons"></div>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+    //variables which will be assigned values later
+    var userLatitude;
+    var userLongitude;
+
+    $("#match").on('click', function(){
+
+      event.preventDefault(); 
+      
+        //text that user enters in "where are you?"
+        var userInput = $("input").val().trim();
+
+        // This is our city name key
+        var queryURL = "https://developers.zomato.com/api/v2.1/locations?query="+userInput;
+
+        $.ajax({
+          url: queryURL,
+          headers: {
+            "Accept": "application/json",
+            "user-key": "9af3dc72ac183d3908f22c466e131944",
+          },
+          method: "GET",
+          dataType: 'json',
+        }).then(function(data){
+          console.log(data);
+          console.log(data.location_suggestions[0].latitude);
+          console.log(data.location_suggestions[0].longitude);
+
+          userLatitude = data.location_suggestions[0].latitude;
+          userLongitude = data.location_suggestions[0].longitude;
+          searchRestaurant();
+        });
+      });      
+
+    function searchRestaurant(){  
+
+      //made a variable for the restaurant search key
+      var restUrl = 'https://developers.zomato.com/api/v2.1/search?&lat='+userLatitude+"&lon="+userLongitude;
+
+      console.log(restUrl);
+
+      $.ajax({
+        url: restUrl,
+        type: "GET", 
+        headers: {
+          'X-Zomato-API-Key': '9af3dc72ac183d3908f22c466e131944'  
+        },
+      }).then(function(response){
+
+          //Need to loop over the data array and return coordinates of 1 restaurant
+          console.log(response);
+
+          //this is console logging restaurants in the userInput city correctly
+          console.log(response.restaurants[2].restaurant);
+          console.log(response.restaurants[2].restaurant.location.latitude);
+          console.log(response.restaurants[2].restaurant.location.longitude);
+
+          //made variables for the restaurant's lat and lon
+          var restaurantLatitude = response.restaurants[2].restaurant.location.latitude;
+          var restaurantLongitude = response.restaurants[2].restaurant.location.longitude;
+
+          var lyft = $('<button>'); 
+          var lyfta = $('<a>');
+          lyfta.text('Lyft');
+          $('#buttons').append(lyft);
+          $(lyft).append(lyfta);
+
+          //<a> of lyft and uber not taking the lat and lon of restaurant
+          $(lyfta).attr("href", "https:lyft.com/ride?id=lyft&destination[latitude]=" +restaurantLatitude+ "&destination[longitude]=" +restaurantLongitude);
+
+          var uber = $('<button>'); 
+          var ubera = $('<a>');
+          ubera.text('Uber');
+          $('#buttons').append(uber);
+          $(uber).append(ubera);
+          $(ubera).attr("href", "https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[latitude]=" +restaurantLatitude+ "&dropoff[longitude]=" +restaurantLongitude); 
+
+        });
+    }
+
+  </script>
+</body>
+</html>
+
+

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+<p>My name is <input id="username" type="text"></p>
+<p>I am a <input id="profession" type="text"></p>
+<button id="storeInfo">Store my info</button>
+
+<!-- JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBx9uPZZTyw4AyEWwBTwB6Cl0o3kyPSKz8",
+    authDomain: "roulette-project.firebaseapp.com",
+    databaseURL: "https://roulette-project.firebaseio.com",
+    projectId: "roulette-project",
+    storageBucket: "roulette-project.appspot.com",
+    messagingSenderId: "52492766979"
+  };
+  firebase.initializeApp(config);
+
+  var database = firebase.database();
+  var userName = "";
+  var userProf = "";
+  
+
+  //stores all users' info in firebase
+  $("#storeInfo").on("click",function(){
+
+  	userName = $("#username").val().trim();
+  	userProf = $("#profession").val().trim();
+
+  	database.ref().push( {
+        name: userName,
+        profession: userProf,
+        dateAdded: firebase.database.ServerValue.TIMESTAMP
+      });
+  	getMatchingProfessions(userProf);
+  	// console.log(userName);
+  	// console.log(userProf);
+  });
+
+function getMatchingProfessions(profession){
+	//this is useful code for logging all users with same profession as "senior developer". Have to find a way to log for all profession names
+  database.ref().orderByChild("profession").equalTo(userProf).on("child_added", function(snapshot) {
+    	// snapshot.key gives the unique alphanumerical key of user
+    	//so commented that out
+    	// console.log(snapshot.key);
+    	console.log(snapshot.val().name);
+      console.log(snapshot.val().profession);
+
+ }, function(errorObject) {
+      console.log("Errors handled: " + errorObject.code);
+ });
+}
+
+</script>
+
+</body>
+</html>
