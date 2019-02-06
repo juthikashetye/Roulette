@@ -8,22 +8,23 @@
 <script src="https://apis.google.com/js/api.js" type="text/javascript"></script>
 
 
- <script type="text/javascript">
+ <script type="text/javascript"> 
 
 //coffee-tea
 //restaurant
 
 function getAddress (latitude, longitude) {
-  $.ajax('https://places.cit.api.here.com/places/v1/discover/explore?at=' + latitude + ',' + longitude + '&cat=restaurant&app_id=ZfRJXkOh1WKLZLV14MDE&app_code=9NvfebHqxDHv33VtQXDsCg')
-  .then(
-    function success (response) {
+  $.ajax({
+    url: 'https://places.cit.api.here.com/places/v1/discover/explore?at=' + latitude + ',' + longitude + '&cat=restaurant&app_id=ZfRJXkOh1WKLZLV14MDE&app_code=9NvfebHqxDHv33VtQXDsCg',
+    type: 'GET'
+  }).then(function success (response) {
       console.log('Suggested locations ', response)
     },
     function fail (status) {
       console.log('Request failed.  Returned status of',
                   status)
     }
-   )
+   );
 }
 
 function getUserAddress (latitude, longitude) {
