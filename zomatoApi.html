@@ -85,14 +85,15 @@
           $(lyft).append(lyfta);
 
           //<a> of lyft and uber not taking the lat and lon of restaurant
-          $(lyfta).attr("href", "https:lyft.com/ride?id=lyft&destination[latitude]=" +restaurantLatitude+ "&destination[longitude]=" +restaurantLongitude);
+          // $(lyfta).attr("href", "https:lyft.com/ride?id=lyft&destination[latitude]=" +restaurantLatitude+ "&destination[longitude]=" +restaurantLongitude);
+          $(lyfta).attr("href", "https://lyft.com/ride?id=lyft&pickup[latitude]="+userLatitude+"&pickup[longitude]="+userLongitude+"=YOUR_CLIENT_ID&destination[latitude]="+restaurantLatitude+"&destination[longitude]="+restaurantLongitude);
 
-          var uber = $('<button>'); 
-          var ubera = $('<a>');
-          ubera.text('Uber');
-          $('#buttons').append(uber);
-          $(uber).append(ubera);
-          $(ubera).attr("href", "https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[latitude]=" +restaurantLatitude+ "&dropoff[longitude]=" +restaurantLongitude); 
+          // var uber = $('<button>'); 
+          // var ubera = $('<a>');
+          // ubera.text('Uber');
+          // $('#buttons').append(uber);
+          // $(uber).append(ubera);
+          // $(ubera).attr("href", "https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[latitude]=" +restaurantLatitude+ "&dropoff[longitude]=" +restaurantLongitude); 
 
         });
     }
