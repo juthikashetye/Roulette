@@ -49,9 +49,10 @@
   $("#go").on("click",function(){
 
     event.preventDefault(); 
-    
+
     //text that user enters in "enter your location here"
     userAddress = $("#userAddress").val().trim();
+    console.log(userAddress);
     userName = $("#username").val().trim();
     userProf = $("#profession").val().trim();
 

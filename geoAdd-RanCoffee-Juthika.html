@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+
+  <form>
+    Nearby: <input type="text" placeholder="City, State Zip" id="userAddress">
+    <button id="go">GO></button>
+  </form>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://apis.google.com/js/api.js" type="text/javascript"></script>
+
+  <script type="text/javascript">
+
+//coffee-tea
+//restaurant
+var userAddress;
+var geoAddress;
+var suggestedLocations;
+var selectedLocation;
+var locationId;
+var userLatitude;
+var userLongitude;
+var appId = "ZfRJXkOh1WKLZLV14MDE";
+var appCode = "9NvfebHqxDHv33VtQXDsCg";
+
+
+function getRestAddress (latitude, longitude) {
+
+  $.ajax({
+    url: "https://places.cit.api.here.com/places/v1/discover/explore?at=" + latitude + "," + longitude + "&cat=coffee-tea&app_id="+appId+"&app_code="+appCode,
+    type: "GET"
+  }).then(function success (data) {
+      // console.log('Suggested locations ', data.results.items)
+      suggestedLocations = data.results.items;
+      // console.log(suggestedLocations)
+      function randomLocation(){
+        var obj_keys = Object.keys(suggestedLocations);
+        var ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+        selectedLocation = suggestedLocations[ran_key];
+        console.log(selectedLocation);
+      }
+      randomLocation();
+    });
+}
+
+function getUserGeoAddress (latitude, longitude) {
+  $.ajax({
+   url: 'https://reverse.geocoder.api.here.com/6.2/reversegeocode.json?prox=' + latitude + ',' + longitude + '',
+   type: 'GET',
+   dataType: 'jsonp',
+   jsonp: 'jsoncallback',
+   data: {
+     mode: 'retrieveAddresses',
+     maxresults: '1',
+     gen: '9',
+     app_id: 'h8bxzedipYeOeMK6Yyi0',
+     app_code: 'Zte-5udXFmEcJ8-43bG6_g'
+   },
+   success: function (data) {
+    geoAddress = data.Response.View[0].Result[0].Location.Address.City +"," + " " + data.Response.View[0].Result[0].Location.Address.State + " " + data.Response.View[0].Result[0].Location.Address.PostalCode;
+    console.log(geoAddress);
+    $('#userAddress').val(geoAddress);
+    userAddress = geoAddress;
+    console.log(userAddress);
+  }
+});
+};
+
+
+if ("geolocation" in navigator) {
+
+  // check if geolocation is supported/enabled on current browser
+  navigator.geolocation.getCurrentPosition(
+
+   function success(position) {
+     // for when getting location is a success
+
+     console.log('latitude', position.coords.latitude,'longitude', position.coords.longitude);
+     
+     getUserGeoAddress(position.coords.latitude, position.coords.longitude);
+
+     $("#go").on("click",function(){
+      event.preventDefault();
+      getRestAddress(position.coords.latitude, position.coords.longitude);
+     })
+   },
+   function error(error_message) {
+    // for when getting location results in an error
+    console.error('An error has occured while retrieving location', error_message)
+
+  });
+} else {
+    // geolocation is not supported
+    // get your location some other way
+    console.log('geolocation is not enabled on this browser')
+  }
+
+  //Code to use if no userAddress or user input
+  // var appId = "ZfRJXkOh1WKLZLV14MDE";
+  //   var appCode = "9NvfebHqxDHv33VtQXDsCg";
+  //   var locationId;
+  //   var userLatitude;
+  //   var userLongitude;
+
+  //   $("#go").on('click', function(){
+
+  //       event.preventDefault(); 
+
+  //       //text that user enters in "enter your location here"
+  //       var userAddress = $("#userAddress").val().trim();
+
+  //       //autocomplete text key (used for getting location id of user address)
+  //       var locIdURL = "http://autocomplete.geocoder.api.here.com/6.2/suggest.json?app_id="+appId+"&app_code="+appCode+"&query="+userAddress+"&beginHighlight=<b>&endHighlight=</b>";
+
+  //       $.ajax({
+  //         url: locIdURL,
+  //         type: "GET"
+  //       }).then(function(data){
+  //         console.log(data);
+
+  //         //getting the location id for the user address
+  //         //chose [0] index as it shows the closest match to the user input
+  //         locationId = data.suggestions[0].locationId;
+  //         console.log(locationId);
+  //         getUserCoords();
+  //       });
+  //     });
+
+  //   function getUserCoords(){
+
+  //       //geocoder key (used for getting lat and long from user's location id)
+  //       var locIdCoordURL = "http://geocoder.api.here.com/6.2/geocode.json?locationid="+locationId+"&jsonattributes=1&gen=9&app_id="+appId+"&app_code="+appCode;
+
+  //       $.ajax({
+  //         url: locIdCoordURL,
+  //         type: "GET"
+  //       }).then(function(data){
+  //         console.log(data);
+  //           userLatitude = data.response.view[0].result[0].location.displayPosition.latitude;
+  //         userLongitude = data.response.view[0].result[0].location.displayPosition.longitude;
+  //           console.log(userLatitude);
+  //           console.log(userLongitude);
+  //       });
+  //   }     
+
+
+</script>
+</body>
+</html>
